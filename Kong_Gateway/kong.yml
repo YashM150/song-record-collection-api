@@ -1,0 +1,28 @@
+_format_version: "3.0"
+
+services:
+  - name: song-collection-api
+    url: http://host.docker.internal:8080   # your Spring Boot app
+    routes:
+      - name: rest-route
+        paths:
+          - /v1/api
+        strip_path: false
+
+plugins:
+
+  - name: rate-limiting
+    service: song-collection-api
+    config:
+      minute: 5           # max 5 requests per minute
+      hour: 100           # max 100 requests per hour
+      policy: local       # use 'redis' in production
+      limit_by: ip        # identify clients by IP
+      error_code: 429
+      error_message: "Too many requests. Please slow down."
+
+  - name: request-size-limiting
+    service: song-collection-api
+    config:
+      allowed_payload_size: 1      # max 1 KB body
+      size_unit: kilobytes

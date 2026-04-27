@@ -1,0 +1,13 @@
+services:
+  kong:
+    image: kong:3.6
+    environment:
+      KONG_DATABASE: "off"              # DB-less mode — no Postgres needed
+      KONG_DECLARATIVE_CONFIG: /kong/kong.yml
+      KONG_PROXY_LISTEN: "0.0.0.0:8000"
+      KONG_ADMIN_LISTEN: "0.0.0.0:8001"
+    ports:
+      - "8000:8000"   # ← your API goes through here (like Apigee proxy URL)
+      - "8001:8001"   # ← Kong Admin API (configure Kong here)
+    volumes:
+      - ./kong.yml:/kong/kong.yml

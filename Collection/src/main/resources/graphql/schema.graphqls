@@ -1,0 +1,38 @@
+# ─────────────────────────────────────────────
+# Types
+# ─────────────────────────────────────────────
+
+type Artist {
+    id:     Int
+    artist: String
+    genre:  String
+    albums: Int
+}
+
+# Input type for mutations (POST equivalent)
+input ArtistInput {
+    artist: String!
+    genre:  String!
+    albums: Int!
+}
+
+# ─────────────────────────────────────────────
+# Queries (GET equivalent)
+# ─────────────────────────────────────────────
+
+type Query {
+    "Fetch all artists — equivalent to GET /artists"
+    artists(page: Int, size: Int): [Artist]
+
+    "Fetch one artist by name — equivalent to GET /artist/{artistName}"
+    artist(artistName: String!): Artist
+}
+
+# ─────────────────────────────────────────────
+# Mutations (POST equivalent)
+# ─────────────────────────────────────────────
+
+type Mutation {
+    "Add a new artist — equivalent to POST /artist"
+    createArtist(input: ArtistInput!): Artist
+}

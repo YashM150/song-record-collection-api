@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>GraphiQL - Song Record Collection</title>
+    <meta charset="UTF-8"/>
+    <style>
+        body { height: 100vh; margin: 0; overflow: hidden; }
+        #graphiql { height: 100vh; }
+    </style>
+
+    <!-- Load from jsDelivr CDN (more stable than unpkg) -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/graphiql@3.0.9/graphiql.min.css"/>
+</head>
+<body>
+<div id="graphiql">Loading GraphiQL...</div>
+
+<script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/graphiql@3.0.9/graphiql.min.js"></script>
+
+<script>
+    const fetcher = GraphiQL.createFetcher({
+        url: 'http://localhost:8080/graphql',
+        headers: {
+            // Basic Auth header — change if your credentials differ
+            'Authorization': 'Basic ' + btoa('admin:secret123')
+        }
+    });
+
+    ReactDOM.createRoot(document.getElementById('graphiql')).render(
+        React.createElement(GraphiQL, {
+            fetcher: fetcher,
+            defaultEditorToolsVisibility: true,
+            defaultQuery: `# Welcome to GraphiQL — Song Record Collection
+#
+# Query all artists
+query GetAllArtists {
+artists(page: 0, size: 10) {
+id
+artist
+genre
+albums
+}
+}
+
+# Query one artist
+# query GetOneArtist {
+#   artist(artistName: "SZA") {
+#     id
+#     artist
+#     genre
+#     albums
+#   }
+# }
+
+# Create artist mutation
+# mutation CreateArtist {
+#   createArtist(input: {
+#     artist: "Drake"
+#     genre: "Hip-Hop"
+#     albums: 7
+#   }) {
+#     id
+#     artist
+#   }
+# }
+`
+        })
+    );
+</script>
+</body>
+</html>
